@@ -1,5 +1,3 @@
-Here’s a simple yet visually appealing `README.md` template for your project:
-
 # 📝 Task Manager App
 
 A **React Native** application for managing tasks, built with **TypeScript** and **Expo**. This app allows users to create, edit, and delete tasks with a clean and intuitive interface.
