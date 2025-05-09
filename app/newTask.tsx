@@ -3,14 +3,19 @@ import { Button, Platform, StyleSheet, TextInput, TouchableOpacity, Alert } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { Text, View } from '@/components/Themed';
+import CustomDropdown from "@/components/CustomDropdown";
 
 export default function ModalScreen() {
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
+  const [priority, setPriority] = React.useState('');
 
   const saveTask = async () => {
     try {
-      const newTask = { title, description };
+      if (title === '' || description === '') {
+        Alert.alert('Error', 'Please fill in all fields!');
+      }
+      const newTask = { title, description, priority };
       const storedTasks = await AsyncStorage.getItem('tasks');
       const tasks = storedTasks ? JSON.parse(storedTasks) : [];
       tasks.push(newTask);
@@ -40,6 +45,8 @@ export default function ModalScreen() {
             value={description}
             onChangeText={setDescription}
         />
+        <Text>Priority</Text>
+        <CustomDropdown items={["Low", "Medium", "High"]} selectedValue="Low" onValueChange={(value: string) => setPriority(value)} />
         <TouchableOpacity style={styles.button} onPress={saveTask}>
           <Text style={styles.buttonText}>Add new task</Text>
         </TouchableOpacity>
@@ -86,4 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  priorityButton: {
+    alignSelf: "flex-start",
+  }
 });

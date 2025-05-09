@@ -6,6 +6,7 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 type Task = {
   title: string;
   description: string;
+  priority?: string;
 };
 
 export default function TabOneScreen() {
@@ -52,6 +53,20 @@ export default function TabOneScreen() {
     );
   }
 
+  const createPriorityStyles = (priority: string) => {
+    const initialStyle = styles.taskPriority;
+
+    switch (priority) {
+      case 'Low':
+        return [initialStyle, styles.lowPriority];
+      case 'Medium':
+        return [initialStyle, styles.mediumPriority];
+      case 'High':
+        return [initialStyle, styles.highPriority];
+      default:
+    }
+  }
+
   return (
       <View style={styles.container}>
         <Button title="New Task" onPress={() => navigation.navigate('newTask')} />
@@ -63,6 +78,7 @@ export default function TabOneScreen() {
                 <View style={styles.taskItem}>
                   <Text style={styles.taskTitle}>{item.title}</Text>
                   <Text style={styles.taskDescription}>{item.description}</Text>
+                  <Text style={createPriorityStyles(item.priority ?? "Low")}>{item.priority ?? "Low"}</Text>
                   <View style={styles.actions}>
                     <TouchableOpacity
                         style={styles.editButton}
@@ -130,5 +146,22 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  taskPriority: {
+    fontSize: 12,
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 5,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+  },
+  lowPriority: {
+    backgroundColor: '#007BFF',
+  },
+  mediumPriority: {
+    backgroundColor: '#FFA500',
+  },
+  highPriority: {
+    backgroundColor: '#FF0000',
   },
 });
