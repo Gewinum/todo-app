@@ -8,7 +8,7 @@ import CustomDropdown from "@/components/CustomDropdown";
 export default function ModalScreen() {
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
-  const [priority, setPriority] = React.useState('');
+  const [priority, setPriority] = React.useState('Low');
 
   const saveTask = async () => {
     try {
@@ -16,9 +16,18 @@ export default function ModalScreen() {
         Alert.alert('Error', 'Please fill in all fields!');
       }
       const newTask = { title, description, priority };
+
       const storedTasks = await AsyncStorage.getItem('tasks');
-      const tasks = storedTasks ? JSON.parse(storedTasks) : [];
+      let tasks = storedTasks ? JSON.parse(storedTasks) : [];
       tasks.push(newTask);
+      const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+
+      // Handle undefined or invalid priorities during sorting
+      tasks = tasks.sort((a: any, b: any) => {
+        const priorityA = priorityOrder[a.priority] || 0;
+        const priorityB = priorityOrder[b.priority] || 0;
+        return priorityB - priorityA;
+      });
       await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
       Alert.alert('Success', 'Task added successfully!');
       setTitle('');
